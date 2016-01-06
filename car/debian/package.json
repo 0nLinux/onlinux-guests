@@ -1,0 +1,14 @@
+{
+  "name": "onlinux-guest-car-debian",
+  "version": "0.0.1",
+  "description": "OnLinux command and report for Debian guest",
+  "main": "car.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "onlinux"
+  ],
+  "author": "Raphael Beer",
+  "license": "GPL-3.0"
+}

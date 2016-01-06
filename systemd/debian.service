@@ -1,0 +1,27 @@
+#==============================#
+#  OnLinux Debian guest unit   #
+#  /lib/systemd/system         #
+#------------------------------#
+# https://linux.online/        #
+# Version:  0.0.1              #
+# Date:     2016/01/04         #
+#==============================#
+
+[Unit]
+Description=OnLinux Debian guest
+After=lightdm.service
+
+[Service]
+PIDFile=/var/run/onlinux
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=OnLinux
+WorkingDirectory=/opt/onlinux
+Type=simple
+ExecStart=/usr/bin/x11vnc -forever -rfbauth /opt/onlinux/vnc.passwd -display :0 -auth /var/run/lightdm/root/:0
+TimeoutStartSec=30s
+TimeoutStopSec=30s
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target
