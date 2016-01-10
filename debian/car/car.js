@@ -28,7 +28,11 @@ function testXserver() {
       console.log('exec err:');
       return console.log(err);
     }
-    console.log(stdout);
+    if (stdout.toString().indexOf('active (running)') > -1) {
+      console.log('lightdm is running');
+    } else {
+      console.log('lightdm is not running');
+    }
   });
 };
 
