@@ -23,7 +23,7 @@ c.on('end', function() {
 });*/
 
 function testXserver() {
-  exec('xset q', function(err, stdout, stderr) {
+  exec('/etc/init.d/lightdm status', function(err, stdout, stderr) {
     if (err) {
       console.log('exec err:');
       return console.log(err);
