@@ -1,14 +1,14 @@
-#==============================#
-#  OnLinux Debian guest unit   #
-#  /lib/systemd/system         #
-#------------------------------#
-# https://linux.online/        #
-# Version:  0.0.1              #
-# Date:     2016/01/04         #
-#==============================#
+#===============================#
+# OnLinux Debian guest VNC unit #
+#  /lib/systemd/system          #
+#-------------------------------#
+# https://linux.online/         #
+# Version:  0.0.1               #
+# Date:     2016/01/04          #
+#===============================#
 
 [Unit]
-Description=OnLinux Debian guest
+Description=OnLinux Debian guest VNC
 After=lightdm.service
 
 [Service]
