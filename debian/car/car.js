@@ -27,13 +27,17 @@ rl.question('Press key to start...', function(evt) {
       c.write('init');
     }
     if (cmd === 'reqvnc') {
-      console.log('is');
       var vncto = setInterval(function() {
         testVNC(function(err, avail) {
           if (err) {
-            clearInterval(vncto);
             vncup = false;
-            if (err.message.indexOf('service: not found') > -1) {
+
+            if (err.code === 3) {
+              // not running ("failed")
+              avail = false;
+            } else if (err.code === 127) {
+              // service unit not found
+              clearInterval(vncto);
               return console.log('Service unit onlinux-vnc is not installed.');
             } else {
               return console.log(err);
@@ -58,7 +62,6 @@ rl.question('Press key to start...', function(evt) {
     console.log('Probing for VNC:');
     exec('service onlinux-vnc status', function(err, stdout, stderr) {
       if (err) {
-        console.log('exec err:');
         return cb(err);
       }
       if (stdout.toString().indexOf('active (running)') > -1) {
