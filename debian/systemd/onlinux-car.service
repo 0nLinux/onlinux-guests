@@ -1,0 +1,27 @@
+#===============================#
+# OnLinux Debian guest CaR unit #
+#  /lib/systemd/system          #
+#-------------------------------#
+# https://linux.online/         #
+# Version:  0.0.1               #
+# Date:     2016/01/04          #
+#===============================#
+
+[Unit]
+Description=OnLinux Debian guest Command and Report (CaR)
+After=network-online.target
+
+[Service]
+PIDFile=/var/run/onlinux-car
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=OnLinux-CaR
+WorkingDirectory=/opt/onlinux
+Type=simple
+ExecStart=/usr/bin/node /opt/onlinux/car/car.js
+TimeoutStartSec=30s
+TimeoutStopSec=30s
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target
