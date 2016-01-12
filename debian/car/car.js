@@ -78,7 +78,7 @@ rl.question('Press key to start...', function(evt) {
     }
   }
 
-  function message = function(type, msg, data) {
+  function message(type, msg, data) {
     return JSON.stringify({ 
       type: type,
       data: data,
