@@ -10,6 +10,9 @@ var rl = require('readline').createInterface({
 
 
 var vncup = false;
+testVNC(function(err, port) {
+  console.log(port);
+});
 rl.question('Press key to start...', function(evt) {
 
   var c = net.connect({
@@ -58,19 +61,22 @@ rl.question('Press key to start...', function(evt) {
     console.log('disconnected from server');
   });
 
+});
   function testVNC(cb) {
     console.log('Probing for VNC:');
-    exec('service onlinux-vnc status', function(err, stdout, stderr) {
+    var cmd = 'netstat -npl | sed -nr \'s/.*?[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+:([0-9]+).*?x11vnc/\\1/ p\'';
+    exec(cmd, function(err, stdout, stderr) {
       if (err) {
+        console.log('failed.');
         return cb(err);
       }
-      if (stdout.toString().indexOf('active (running)') > -1) {
-        console.log('VNC is running');
+      console.log(stdout.toString());
+      /*if (stdout.toString().indexOf('active (running)') > -1) {
+        console.log('running.');
         return cb(null, true);
       } else {
         console.log('VNC is not running');
         return cb(null, false);
-      }
+      }*/
     });
   };
-});
