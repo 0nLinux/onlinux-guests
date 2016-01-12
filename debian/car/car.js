@@ -19,18 +19,17 @@ rl.question('Press key to start...', function(evt) {
   });
 
   c.on('data', function(data) {
-    console.log(data.toString());
     var cmd = data.toString().trim();
-    console.log(cmd.length);
     if (cmd === 'hello') {
       c.write('init');
     }
     if (cmd === 'reqvnc') {
+      console.log('Probing for VNC:');
       var vncto = setInterval(function() {
         testVNC(function(err, port) {
           if (err) {
             c.write('wait');
-            if (err.toString() === 'EVNCDOWN') {
+            if (err.message === 'EVNCDOWN') {
               return console.log('VNC not up yet...');
             } else {
               return console.log(err);
@@ -47,7 +46,6 @@ rl.question('Press key to start...', function(evt) {
   });
 
   function testVNC(cb) {
-    console.log('Probing for VNC:');
     var cmd = 'netstat -npl | sed -nr \'s/.*?[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+:([0-9]+).*?x11vnc/\\1/ p\'';
     exec(cmd, function(err, stdout, stderr) {
       var port;
