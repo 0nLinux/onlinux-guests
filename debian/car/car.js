@@ -3,14 +3,14 @@
 var net = require('net');
 var sys = require('sys');
 var exec = require('child_process').exec;
-var rl = require('readline').createInterface({
+/*var rl = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
 
 rl.question('Press key to start...', function(evt) {
-
+*/
   var c = net.connect({
     host: '192.168.2.56',
     port: 15121
@@ -24,7 +24,7 @@ rl.question('Press key to start...', function(evt) {
 
     if (data.type === 'status') {
       if (data.msg === 'hello') {
-        c.write('init');
+        c.write(message('status', 'init'));
       }
     }
 
@@ -86,4 +86,4 @@ rl.question('Press key to start...', function(evt) {
     });
   };
 
-});
+//});
