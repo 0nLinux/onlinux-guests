@@ -15,31 +15,38 @@ rl.question('Press key to start...', function(evt) {
     host: '192.168.2.56',
     port: 15121
   }, function() {
-    console.log('connected to server, sending init');
+    console.log('connected to server, waiting for hello');
   });
 
   c.on('data', function(data) {
-    var cmd = data.toString().trim();
-    if (cmd === 'hello') {
-      c.write('init');
+
+    data = parseData(data.toString());
+
+    if (data.type === 'status') {
+      if (data.msg === 'hello') {
+        c.write('init');
+      }
     }
-    if (cmd === 'reqvnc') {
-      console.log('Probing for VNC:');
-      var vncto = setInterval(function() {
-        testVNC(function(err, port) {
-          if (err) {
-            c.write('wait');
-            if (err.message === 'EVNCDOWN') {
-              return console.log('VNC not up yet...');
-            } else {
-              return console.log(err);
+
+    if (data.type === 'cmd') {
+      if (data.msg === 'reqvnc') {
+        console.log('Probing for VNC:');
+        var vncto = setInterval(function() {
+          testVNC(function(err, port) {
+            if (err) {
+              c.write('wait');
+              if (err.message === 'EVNCDOWN') {
+                return console.log('VNC not up yet...');
+              } else {
+                return console.log(err);
+              }
             }
-          }
-          c.write('goahead');
-          clearInterval(vncto);
-        });
-      }, 1000);
-    }
+            c.write(message('status', 'goahead', { 'port': port }));
+            clearInterval(vncto);
+          });
+        }, 1000);
+      } // msg
+    } // type
   });
   c.on('end', function() {
     console.log('disconnected from server');
@@ -58,6 +65,24 @@ rl.question('Press key to start...', function(evt) {
       } else {
         return cb(new Error('EVNCDOWN'));
       }
+    });
+  };
+
+  function parseData(data) {
+    data = data.trim();
+    try {
+      console.log(data);
+      return JSON.parse(data); 
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function message = function(type, msg, data) {
+    return JSON.stringify({ 
+      type: type,
+      data: data,
+      msg: msg
     });
   };
 
