@@ -66,17 +66,18 @@ rl.question('Press key to start...', function(evt) {
     console.log('Probing for VNC:');
     var cmd = 'netstat -npl | sed -nr \'s/.*?[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+:([0-9]+).*?x11vnc/\\1/ p\'';
     exec(cmd, function(err, stdout, stderr) {
+      var port;
       if (err) {
         console.log('failed.');
         return cb(err);
       }
-      console.log(stdout.toString());
-      /*if (stdout.toString().indexOf('active (running)') > -1) {
+      port = parseInt(stdout.toString()) || 0;
+      if (port !== 0) {
         console.log('running.');
-        return cb(null, true);
+        return cb(null, port);
       } else {
         console.log('VNC is not running');
         return cb(null, false);
-      }*/
+      }
     });
   };
