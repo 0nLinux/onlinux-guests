@@ -12,16 +12,14 @@ var exec = require('child_process').exec;
 rl.question('Press key to start...', function(evt) {
 */
   var c = net.connect({
-    host: '192.168.2.56',
+    host: '192.168.56.1',
     port: 15121
   }, function() {
     console.log('connected to server, waiting for hello');
   });
 
   c.on('data', function(data) {
-
     data = parseData(data.toString());
-
     if (data.type === 'status') {
       if (data.msg === 'hello') {
         c.write(message('status', 'init'));
@@ -34,7 +32,7 @@ rl.question('Press key to start...', function(evt) {
         var vncto = setInterval(function() {
           testVNC(function(err, port) {
             if (err) {
-              c.write('wait');
+              c.write(message('status', 'wait'));
               if (err.message === 'EVNCDOWN') {
                 return console.log('VNC not up yet...');
               } else {
@@ -79,7 +77,7 @@ rl.question('Press key to start...', function(evt) {
   }
 
   function message(type, msg, data) {
-    return JSON.stringify({ 
+    return JSON.stringify({
       type: type,
       data: data,
       msg: msg
